@@ -3,16 +3,6 @@ library(grid)
 library(forestploter)
 
 # Read provided sample example data
-outcomes <- c(
-    "Anxiety",
-    "Depression",
-    "Parent satisfaction",
-    "Parent self-efficacy",
-    "Parent-child interaction",
-    "Parental confidence",
-    "Social support",
-    "Stress"
-)
 reg_table <- read.csv(paste("data/reg_table.csv", sep = "")) %>%
     group_split(outcome)
 for (reg_outcome in reg_table) {
