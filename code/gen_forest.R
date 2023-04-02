@@ -65,7 +65,14 @@ for (reg_outcome in reg_table) {
 
     p <- edit_plot(p, row = nrow(data), gp = gpar(fontface = "bold"))
     p <- edit_plot(p, col = c(3:4, 6), which = "text", hjust = unit(1, "npc"), x = unit(0.9, "npc"))
-    p <- edit_plot(p, col = c(3:4, 6), part = "header", which = "text", hjust = unit(1, "npc"), x = unit(0.9, "npc"))
+    p <- edit_plot(
+        p,
+        col = c(3:4, 6),
+        part = "header",
+        which = "text",
+        hjust = unit(1, "npc"),
+        x = unit(0.9, "npc")
+    )
 
     # Print plot
     png(

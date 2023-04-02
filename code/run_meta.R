@@ -48,8 +48,7 @@ data_outcomes <- data %>%
     group_split(outcome)
 
 reg_table <- data.frame()
-for (data_outcome in data_outcomes)
-{
+for (data_outcome in data_outcomes) {
     outcome_name <- data_outcome[["outcome"]][1]
     cat("\n\n\n\n", toupper(outcome_name), "\n", sep = "")
     # print(data_outcome, n = 50)
@@ -95,36 +94,41 @@ for (data_outcome in data_outcomes)
     reg_table <- rbind(reg_table, result$reg_table)
     cat("\n\n")
     print(result)
-    
+
     png(
         paste("figures/", outcome_name, "_funnel.png", sep = ""),
         res = 600,
-        width = 7,
-        height = 7,
+        width = 5,
+        height = 5,
         units = "in",
     )
     funnel(
-        x=data_outcome$yi,
-        vi=data_outcome$vi,
-        xlab="Cohen's d",
-        slab=data_outcome$study,
-        back="white",
-        level=c(90, 95),
-        shade=c("gray90", "gray95"),
-        legend=ifelse(result$reg_table$b.r < 0, "topleft", TRUE),
+        x = data_outcome$yi,
+        vi = data_outcome$vi,
+        xlab = "Cohen's d",
+        slab = data_outcome$study,
+        back = "white",
+        level = c(90, 95),
+        shade = c("gray65", "gray85"),
+        # legend = ifelse(result$reg_table$b.r < 0, "topleft", TRUE),
     )
-    text(
-        data_outcome$yi,
-        sqrt(data_outcome$vi) - 0.008,
-        data_outcome$study,
-        cex = 0.6,
-        col = "darkgray",
+    legend(
+        ifelse(result$reg_table$b.r < 0, "topleft", "topright"),
+        c("0.10 < p < 1.00", "0.05 < p < 0.10", "0.00 < p < 0.05"),
+        fill = c("gray65", "gray85", "white"),
+        bty = "n",
     )
+    # text(
+    #     data_outcome$yi,
+    #     sqrt(data_outcome$vi) - 0.008,
+    #     data_outcome$study,
+    #     cex = 0.6,
+    #     col = "darkgray",
+    # )
     dev.off()
 }
 
 reg_table <- reg_table %>% mutate(
-        across(where(is.numeric), round, 3),
         `Egger's sig` = case_when(
             `Egger's prob` < 0.01 ~ "***",
             `Egger's prob` < 0.05 ~ "**",
@@ -132,6 +136,7 @@ reg_table <- reg_table %>% mutate(
             TRUE ~ "",
         ),
     ) %>%
+    mutate_if(is.numeric, ~round(., 3)) %>%
     select("outcome", everything())
 
 write.csv(
@@ -141,7 +146,7 @@ write.csv(
 )
 
 png(
-    "figures/results.png",
+    "figures/Results.png",
     res = 600,
     width = 12,
     height = 5,
@@ -161,9 +166,9 @@ table <- gtable_add_rows(table, heights = c(0.3, 1.2) * grobHeight(footnote))
 table <- gtable_add_grob(
     table,
     footnote,
-    t=nrow(table),
-    l=1,
-    r=ncol(table),
+    t = nrow(table),
+    l = 1,
+    r = ncol(table),
 )
 grid.draw(table)
 dev.off()
