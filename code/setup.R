@@ -1,0 +1,8 @@
+install.packages("tidyverse")
+install.packages("metafor")
+install.packages("readxl")
+install.packages("robumeta")
+install.packages("httpgd")
+install.packages("grid")
+install.packages("forestploter")
+install.packages("plyr")
