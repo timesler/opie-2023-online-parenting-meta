@@ -79,7 +79,7 @@ for (reg_outcome in reg_table) {
         paste("figures/", outcome_name, ".png", sep = ""),
         res = 600,
         width = 10,
-        height = (nrow(data) + 2) / 3,
+        height = (nrow(data)) / 3.5 + 1,
         units = "in",
     )
     plot(p)

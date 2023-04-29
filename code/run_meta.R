@@ -26,7 +26,7 @@ data <- escalc(
     n2i = ncon,
 )
 
-data <- data %>% filter(study != "Sawyer (2017)", outcome != "Parental confidence")
+data <- data %>% filter(outcome != "Parental confidence")
 
 # When Cohen's d cannot be calculated, fall back to reported values
 data$yi <- coalesce(data$yi, data$precalc_d)
@@ -137,7 +137,8 @@ reg_table <- reg_table %>% mutate(
         ),
     ) %>%
     mutate_if(is.numeric, ~round(., 3)) %>%
-    select("outcome", everything())
+    select("outcome", everything()) %>%
+    relocate(any_of(c("CI.L", "CI.U")), .after = `b.r`)
 
 write.csv(
     reg_table,
@@ -145,10 +146,17 @@ write.csv(
     row.names = FALSE,
 )
 
+reg_table <- reg_table %>% rename(
+        `Cohen's d` = `b.r`,
+        `p-val` = prob,
+        `95% CI (L)` = `CI.L`,
+        `95% CI (U)` = `CI.U`,
+    )
+
 png(
     "figures/Results.png",
     res = 600,
-    width = 12,
+    width = 13,
     height = 5,
     units = "in",
 )
