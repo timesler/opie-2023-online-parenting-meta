@@ -99,9 +99,10 @@ for (data_outcome in data_outcomes) {
         paste("figures/", outcome_name, "_funnel.png", sep = ""),
         res = 600,
         width = 5,
-        height = 5,
+        height = 4.6,
         units = "in",
     )
+    par(mar = c(3.55, 3.55, 1.1, 1.2), mgp = c(2.3, 1, 0))
     funnel(
         x = data_outcome$yi,
         vi = data_outcome$vi,
