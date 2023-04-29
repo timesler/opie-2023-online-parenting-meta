@@ -28,6 +28,29 @@ data <- escalc(
 
 data <- data %>% filter(outcome != "Parental confidence")
 
+# Summarize included studies
+study_outcomes <- data %>%
+    distinct(study, outcome) %>%
+    group_by(study) %>%
+    mutate(outcome = paste0(outcome, collapse = ", "))
+study_fus <- data %>%
+    distinct(study, post_intervention_months) %>%
+    group_by(study) %>%
+    mutate(post_intervention_months = paste0(post_intervention_months, collapse = ", "))
+study_summary <- distinct(merge(study_outcomes, study_fus, by="study"))
+
+png(
+    "figures/Study summaries.png",
+    res = 600,
+    width = 11,
+    height = 8,
+    units = "in",
+)
+theme <- ttheme_default(core = list(fg_params = list(hjust = 0, x = 0.01)))
+table <- tableGrob(study_summary, theme = theme, rows = NULL)
+grid.draw(table)
+dev.off()
+
 # When Cohen's d cannot be calculated, fall back to reported values
 data$yi <- coalesce(data$yi, data$precalc_d)
 data$vi <- coalesce(data$vi, data$precalc_v)

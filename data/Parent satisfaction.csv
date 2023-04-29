@@ -1,6 +1,6 @@
 "study","sample_id","outcome","subsample","post_intervention_months","yi","vi","N"
-"Jareethum, (2008)",48,"Parent satisfaction","Antenatal",0,1.34116638068313,0.0804764246917938,61
-"Jareethum, (2008)",49,"Parent satisfaction","Perinatal",0,0.741873729749582,0.0702440424804647,61
+"Jareethum (2008)",48,"Parent satisfaction","Antenatal",0,1.34116638068313,0.0804764246917938,61
+"Jareethum (2008)",49,"Parent satisfaction","Perinatal",0,0.741873729749582,0.0702440424804647,61
 "Lindsay (2017)",50,"Parent satisfaction",NA,0,-0.29069982737135,0.00972494074217423,422
 "Salonen (2014)",51,"Parent satisfaction",NA,0,-0.0790188213143296,0.00537168067541785,760
 "Salonen (2014)",52,"Parent satisfaction",NA,1.5,0.123842449941784,0.00800349400010597,512
