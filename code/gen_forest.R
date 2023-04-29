@@ -17,7 +17,7 @@ for (reg_outcome in reg_table) {
         ) %>%
         arrange(-yi)
     reg_outcome <- data.frame(
-        study = "Total",
+        study = "Total                           ",
         yi = reg_outcome$b.r,
         ci.lb = reg_outcome$CI.L,
         ci.ub = reg_outcome$CI.U,
@@ -78,8 +78,8 @@ for (reg_outcome in reg_table) {
     png(
         paste("figures/", outcome_name, ".png", sep = ""),
         res = 600,
-        width = 10,
-        height = (nrow(data)) / 3.5 + 1,
+        width = 9.5,
+        height = (nrow(data)) / 4.25 + 0.9,
         units = "in",
     )
     plot(p)
