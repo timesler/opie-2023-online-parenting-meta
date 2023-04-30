@@ -1,12 +1,12 @@
-"study","sample_id","outcome","subsample","post_intervention_months","yi","vi","N"
-"Jareethum (2008)",48,"Parent satisfaction","Antenatal",0,1.34116638068313,0.0804764246917938,61
-"Jareethum (2008)",49,"Parent satisfaction","Perinatal",0,0.741873729749582,0.0702440424804647,61
-"Lindsay (2017)",50,"Parent satisfaction",NA,0,-0.29069982737135,0.00972494074217423,422
-"Salonen (2014)",51,"Parent satisfaction",NA,0,-0.0790188213143296,0.00537168067541785,760
-"Salonen (2014)",52,"Parent satisfaction",NA,1.5,0.123842449941784,0.00800349400010597,512
-"Salonen (2014)",53,"Parent satisfaction",NA,6,-0.0999929885924437,0.00823064023145543,501
-"Salonen (2014)",54,"Parent satisfaction",NA,12,-0.0339750969923646,0.00976455512314263,423
-"Shorey (2017)",55,"Parent satisfaction",NA,1,2.49811472008705,0.0284821783749714,250
-"Shorey (2019a)",56,"Parent satisfaction",NA,0,0.01653987,0.009971628,210
-"Shorey (2019a)",57,"Parent satisfaction",NA,1,1.918625,0.009417759,194
-"Shorey (2019a)",58,"Parent satisfaction",NA,3,0.7939136,0.01172819,186
+"study","sample_id","outcome","subsample","post_intervention_months","yi","vi","N","design"
+"Jareethum (2008)",48,"Parent satisfaction","Antenatal",0,1.34116638068313,0.0804764246917938,61,"Experimental"
+"Jareethum (2008)",49,"Parent satisfaction","Perinatal",0,0.741873729749582,0.0702440424804647,61,"Experimental"
+"Lindsay (2017)",50,"Parent satisfaction",NA,0,-0.29069982737135,0.00972494074217423,422,"Quasi-experimental"
+"Salonen (2014)",51,"Parent satisfaction",NA,0,-0.0790188213143296,0.00537168067541785,760,"Quasi-experimental"
+"Salonen (2014)",52,"Parent satisfaction",NA,1.5,0.123842449941784,0.00800349400010597,512,"Quasi-experimental"
+"Salonen (2014)",53,"Parent satisfaction",NA,6,-0.0999929885924437,0.00823064023145543,501,"Quasi-experimental"
+"Salonen (2014)",54,"Parent satisfaction",NA,12,-0.0339750969923646,0.00976455512314263,423,"Quasi-experimental"
+"Shorey (2017)",55,"Parent satisfaction",NA,1,2.49811472008705,0.0284821783749714,250,"Experimental"
+"Shorey (2019a)",56,"Parent satisfaction",NA,0,0.01653987,0.009971628,210,"Experimental"
+"Shorey (2019a)",57,"Parent satisfaction",NA,1,1.918625,0.009417759,194,"Experimental"
+"Shorey (2019a)",58,"Parent satisfaction",NA,3,0.7939136,0.01172819,186,"Experimental"

@@ -66,6 +66,7 @@ data_outcomes <- data %>%
         "yi",
         "vi",
         "N",
+        "design",
     ) %>%
     # mutate(post_3m=post_intervention_months >= 3) %>%
     group_split(outcome)
@@ -73,13 +74,18 @@ data_outcomes <- data %>%
 reg_table <- data.frame()
 for (data_outcome in data_outcomes) {
     outcome_name <- data_outcome[["outcome"]][1]
-    cat("\n\n\n\n", toupper(outcome_name), "\n", sep = "")
-    # print(data_outcome, n = 50)
+    cat(
+        "\n\n\n\n############################\n",
+        toupper(outcome_name),
+        "\n############################\n",
+        sep = ""
+    )
     write.csv(
         data_outcome,
         file = paste("data/", outcome_name, ".csv", sep = ""),
         row.names = FALSE,
     )
+
     result <- robu(
         formula = yi ~ 1,
         data = data_outcome,
@@ -107,13 +113,34 @@ for (data_outcome in data_outcomes) {
         favor_positive = result$reg_table$b.r > 0,
     )
 
+    study_design_stats <- data_outcome %>% group_by(design) %>% summarise(n = n())
+    study_design_sens <- "N/A"
+    if (min(study_design_stats$n) > 2 && nrow(study_design_stats) == 2) {
+        result_metareg <- robu(
+            formula = yi ~ design,
+            data = data_outcome,
+            var.eff.size = vi,
+            studynum = study,
+            rho = 0.8,
+            small = TRUE,
+        )
+        study_design_sens <- paste(
+            paste0("t=", round(result_metareg$reg_table$t[2], 3)),
+            paste0("p=", round(result_metareg$reg_table$prob[2], 3)),
+            paste0("df=", round(result_metareg$reg_table$dfs[2], 3)),
+            sep = ", "
+        )
+    }
+
     result$reg_table$`s-value*` <- ifelse(
         is.numeric(bias_result$stats$sval_ci),
         round(bias_result$stats$sval_ci, 3),
         "--"
     )
     result$reg_table$`Egger's prob` <- eggers$reg_table$prob[2]
+    result$reg_table$`Exp/quasi sensitivity^` <- study_design_sens
     result$reg_table$outcome <- outcome_name
+
     reg_table <- rbind(reg_table, result$reg_table)
     cat("\n\n")
     print(result)
@@ -180,14 +207,17 @@ reg_table <- reg_table %>% rename(
 png(
     "figures/Results.png",
     res = 600,
-    width = 13,
+    width = 15,
     height = 5,
     units = "in",
 )
 footnote <- textGrob(
     paste(
         "*s-value is defined as the ratio by which significant studies would have be to more",
-        "likely to be published than non-signficant studies to eliminate significance."
+        "likely to be published than non-signficant studies to eliminate significance.",
+        "\n^The sensitivity analysis for study design compared experimental and quasi-experimental",
+        "studies. A significant impact due to study design is indicated by a p<0.05.\nSome",
+        "outcomes included only experimental study designs, indicated by N/A."
     ),
     x = 0,
     hjust = 0,

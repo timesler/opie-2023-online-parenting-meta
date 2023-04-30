@@ -1,11 +1,11 @@
-"study","sample_id","outcome","subsample","post_intervention_months","yi","vi","N"
-"Baggett (2010)",84,"Parent-child interaction","Infant behavior",5,2.3422891666297,0.1774515597383,38
-"Baggett (2010)",85,"Parent-child interaction","Responsiveness",5,1.61551210065018,0.139603675622989,38
-"Breitenstein (2021)",86,"Parent-child interaction",NA,3,1.20489145575402,0.0185873356822094,255
-"Breitenstein (2021)",87,"Parent-child interaction",NA,6,0.756866964054604,0.0163036884324155,263
-"Breitenstein (2021)",88,"Parent-child interaction",NA,12,0.819538648138655,0.0169520776028229,256
-"Ehrensaft (2016)",89,"Parent-child interaction",NA,0,0.257172766016903,0.0947686602850575,44
-"Mogil (2022)",90,"Parent-child interaction","Mothers",12,0.36,0.0210616963125189,193
-"Mogil (2022)",91,"Parent-child interaction","Fathers",12,0,0.0261717413616148,153
-"Na (2008)",92,"Parent-child interaction",NA,0,0.00143604024787912,0.0105595578539019,418
-"Park (2022)",93,"Parent-child interaction",NA,0,1.6098,0.166,32
+"study","sample_id","outcome","subsample","post_intervention_months","yi","vi","N","design"
+"Baggett (2010)",84,"Parent-child interaction","Infant behavior",5,2.3422891666297,0.1774515597383,38,"Experimental"
+"Baggett (2010)",85,"Parent-child interaction","Responsiveness",5,1.61551210065018,0.139603675622989,38,"Experimental"
+"Breitenstein (2021)",86,"Parent-child interaction",NA,3,1.20489145575402,0.0185873356822094,255,"Quasi-experimental"
+"Breitenstein (2021)",87,"Parent-child interaction",NA,6,0.756866964054604,0.0163036884324155,263,"Quasi-experimental"
+"Breitenstein (2021)",88,"Parent-child interaction",NA,12,0.819538648138655,0.0169520776028229,256,"Quasi-experimental"
+"Ehrensaft (2016)",89,"Parent-child interaction",NA,0,0.257172766016903,0.0947686602850575,44,"Experimental"
+"Mogil (2022)",90,"Parent-child interaction","Mothers",12,0.36,0.0210616963125189,193,"Experimental"
+"Mogil (2022)",91,"Parent-child interaction","Fathers",12,0,0.0261717413616148,153,"Experimental"
+"Na (2008)",92,"Parent-child interaction",NA,0,0.00143604024787912,0.0105595578539019,418,"Experimental"
+"Park (2022)",93,"Parent-child interaction",NA,0,1.6098,0.166,32,"Quasi-experimental"

@@ -1,21 +1,21 @@
-"study","sample_id","outcome","subsample","post_intervention_months","yi","vi","N"
-"Dol (2022)",94,"Social support","Primiparious",1.5,-0.309269703022062,0.0530020416615196,77
-"Dol (2022)",95,"Social support","Multiparous",1.5,1.50395396026666,0.0743736100497876,69
-"Huang (2021)",96,"Social support",NA,0,1.23335176628715,0.132238285825051,36
-"Huang (2021)",97,"Social support",NA,3,0.104889814146083,0.111263914904328,36
-"Jiao (2019)",98,"Social support",NA,1,1.72858462521319,0.0429218937754822,128
-"Jiao (2019)",99,"Social support",NA,3,2.08517243233756,0.0532649477676912,116
-"Jiao (2019)",100,"Social support",NA,6,1.65632419672653,0.0433285949663771,124
-"Sawyer (2017)",101,"Social support","Maternal support scale",9,-0.698427067102005,0.00879681481867684,483
-"Sawyer (2017)",102,"Social support","Maternal support scale",15,0.0377548962956684,0.00837907836281589,478
-"Sawyer (2017)",103,"Social support","Maternal support scale",21,-0.500948609470727,0.00907146023196587,456
-"Sawyer (2017)",104,"Social support","Support eval. list",9,-0.43016868257991,0.00848340356340958,483
-"Sawyer (2017)",105,"Social support","Support eval. list",15,0.184746603547061,0.00841328952947685,478
-"Sawyer (2017)",106,"Social support","Support eval. list",21,-0.689742436348056,0.00931794610824734,456
-"Shorey (2017)",107,"Social support","Spousal support",1,1.21116576408323,0.0189348690817148,250
-"Shorey (2017)",108,"Social support","Non-spousal support",1,1.00271460697573,0.0180118972316252,250
-"Shorey (2019a)",109,"Social support",NA,0,-0.0992392,0.006426864,210
-"Shorey (2019a)",110,"Social support",NA,1,1.725659,0.009417759,194
-"Shorey (2019a)",111,"Social support",NA,3,0.41901,0.01265987,186
-"Song (2022)",112,"Social support",NA,1,-0.00389253657827958,0.090000168353789,45
-"Song (2022)",113,"Social support",NA,2,0.812206300862004,0.0973297675017771,45
+"study","sample_id","outcome","subsample","post_intervention_months","yi","vi","N","design"
+"Dol (2022)",94,"Social support","Primiparious",1.5,-0.309269703022062,0.0530020416615196,77,"Experimental"
+"Dol (2022)",95,"Social support","Multiparous",1.5,1.50395396026666,0.0743736100497876,69,"Experimental"
+"Huang (2021)",96,"Social support",NA,0,1.23335176628715,0.132238285825051,36,"Experimental"
+"Huang (2021)",97,"Social support",NA,3,0.104889814146083,0.111263914904328,36,"Experimental"
+"Jiao (2019)",98,"Social support",NA,1,1.72858462521319,0.0429218937754822,128,"Experimental"
+"Jiao (2019)",99,"Social support",NA,3,2.08517243233756,0.0532649477676912,116,"Experimental"
+"Jiao (2019)",100,"Social support",NA,6,1.65632419672653,0.0433285949663771,124,"Experimental"
+"Sawyer (2017)",101,"Social support","Maternal support scale",9,-0.698427067102005,0.00879681481867684,483,"Experimental"
+"Sawyer (2017)",102,"Social support","Maternal support scale",15,0.0377548962956684,0.00837907836281589,478,"Experimental"
+"Sawyer (2017)",103,"Social support","Maternal support scale",21,-0.500948609470727,0.00907146023196587,456,"Experimental"
+"Sawyer (2017)",104,"Social support","Support eval. list",9,-0.43016868257991,0.00848340356340958,483,"Experimental"
+"Sawyer (2017)",105,"Social support","Support eval. list",15,0.184746603547061,0.00841328952947685,478,"Experimental"
+"Sawyer (2017)",106,"Social support","Support eval. list",21,-0.689742436348056,0.00931794610824734,456,"Experimental"
+"Shorey (2017)",107,"Social support","Spousal support",1,1.21116576408323,0.0189348690817148,250,"Experimental"
+"Shorey (2017)",108,"Social support","Non-spousal support",1,1.00271460697573,0.0180118972316252,250,"Experimental"
+"Shorey (2019a)",109,"Social support",NA,0,-0.0992392,0.006426864,210,"Experimental"
+"Shorey (2019a)",110,"Social support",NA,1,1.725659,0.009417759,194,"Experimental"
+"Shorey (2019a)",111,"Social support",NA,3,0.41901,0.01265987,186,"Experimental"
+"Song (2022)",112,"Social support",NA,1,-0.00389253657827958,0.090000168353789,45,"Quasi-experimental"
+"Song (2022)",113,"Social support",NA,2,0.812206300862004,0.0973297675017771,45,"Quasi-experimental"
