@@ -7,6 +7,8 @@ library(gridExtra)
 library(grid)
 library(gtable)
 library(PublicationBias)
+library(ggplot2)
+library(ggpmisc)
 
 options(warn = -1)
 
@@ -37,7 +39,7 @@ study_fus <- data %>%
     distinct(study, post_intervention_months) %>%
     group_by(study) %>%
     mutate(post_intervention_months = paste0(post_intervention_months, collapse = ", "))
-study_summary <- distinct(merge(study_outcomes, study_fus, by="study"))
+study_summary <- distinct(merge(study_outcomes, study_fus, by = "study"))
 
 png(
     "figures/Study summaries.png",
@@ -52,8 +54,70 @@ grid.draw(table)
 dev.off()
 
 # When Cohen's d cannot be calculated, fall back to reported values
-data$yi <- coalesce(data$yi, data$precalc_d)
-data$vi <- coalesce(data$vi, data$precalc_v)
+data <- data %>% mutate(
+    yi = coalesce(yi, precalc_d),
+    vi = coalesce(vi, precalc_v),
+    `Cohen's d (sign adj.)` = case_when(
+        outcome %in% c("Anxiety", "Depression", "Stress") ~ -yi,
+        TRUE ~ yi,
+    ),
+    post_bins = case_when(
+        post_intervention_months <= 3 ~ "<=3",
+        post_intervention_months <= 6 ~ ">3,<=6",
+        post_intervention_months > 6 ~ ">6,<=24",
+    )
+)
+
+
+cat(
+    "\n\n\n\n############################\n",
+    "Comparing follow-up periods (0-3 mos, 4-6 mos, 7-24 mos)",
+    "\n############################\n",
+    sep = ""
+)
+
+tt <- t.test(
+    x = (data %>% filter(post_bins == "<=3"))$`Cohen's d (sign adj.)`,
+    y = (data %>% filter(post_bins == ">3,<=6"))$`Cohen's d (sign adj.)`
+)
+cat("\n0-3 months vs. 4-6 months:\n")
+print(tt)
+tt <- t.test(
+    x = (data %>% filter(post_bins == "<=3"))$`Cohen's d (sign adj.)`,
+    y = (data %>% filter(post_bins == ">6,<=24"))$`Cohen's d (sign adj.)`
+)
+cat("\n0-3 months vs. 7-24 months\n")
+print(tt)
+tt <- t.test(
+    x = (data %>% filter(post_bins == ">3,<=6"))$`Cohen's d (sign adj.)`,
+    y = (data %>% filter(post_bins == ">6,<=24"))$`Cohen's d (sign adj.)`
+)
+cat("\n4-6 months vs. 7-24 months\n")
+print(tt)
+
+result_time_all <- robu(
+    formula = `Cohen's d (sign adj.)` ~ post_intervention_months,
+    data = data,
+    var.eff.size = vi,
+    studynum = study,
+    rho = 0.8,
+    small = TRUE,
+)
+print(result_time_all)
+
+g <- ggplot(
+        data %>% rename(`Post-intervention assessment interval (mos.)` = post_intervention_months),
+        aes(x = `Post-intervention assessment interval (mos.)`, y = `Cohen's d (sign adj.)`),
+    ) +
+    stat_poly_line() +
+    stat_poly_eq(use_label(c("eq", "R2"))) +
+    geom_point(aes(col = outcome))
+ggsave(
+    paste("figures/Time trend.png", sep = ""),
+    plot = g,
+    width = 10,
+    height = 6,
+)
 
 data_outcomes <- data %>%
     # filter(post_intervention_months <= 6) %>%
@@ -67,8 +131,8 @@ data_outcomes <- data %>%
         "vi",
         "N",
         "design",
+        "control",
     ) %>%
-    # mutate(post_3m=post_intervention_months >= 3) %>%
     group_split(outcome)
 
 reg_table <- data.frame()
@@ -113,6 +177,7 @@ for (data_outcome in data_outcomes) {
         favor_positive = result$reg_table$b.r > 0,
     )
 
+    # Run sensitivity analysis over study design
     study_design_stats <- data_outcome %>% group_by(design) %>% summarise(n = n())
     study_design_sens <- "N/A"
     if (min(study_design_stats$n) > 2 && nrow(study_design_stats) == 2) {
@@ -132,13 +197,74 @@ for (data_outcome in data_outcomes) {
         )
     }
 
-    result$reg_table$`s-value*` <- ifelse(
+    # Run sensitivity analysis over control type (active/inactive)
+    control_stats <- data_outcome %>% group_by(control) %>% summarise(n = n())
+    control_sens <- "N/A"
+    routine_care_effects <- "N/A"
+    if (min(control_stats$n) > 2 && nrow(control_stats) == 2) {
+        result_metareg <- robu(
+            formula = yi ~ control,
+            data = data_outcome,
+            var.eff.size = vi,
+            studynum = study,
+            rho = 0.8,
+            small = TRUE,
+        )
+        control_sens <- paste(
+            paste0("t=", round(result_metareg$reg_table$t[2], 3)),
+            paste0("p=", round(result_metareg$reg_table$prob[2], 3)),
+            paste0("df=", round(result_metareg$reg_table$dfs[2], 3)),
+            sep = ", "
+        )
+
+        if (result_metareg$reg_table$prob[2] < 0.05) {
+            result_routine_care <- robu(
+                formula = yi ~ 1,
+                data = data_outcome %>% filter(control == "Routine care"),
+                var.eff.size = vi,
+                studynum = study,
+                rho = 0.8,
+                small = TRUE,
+            )
+            routine_care_effects <- paste(
+                paste0("d=", round(result_routine_care$reg_table$`b.r`, 3)),
+                paste0("p=", round(result_routine_care$reg_table$prob, 3)),
+                sep = ", "
+            )
+        }
+    }
+
+    # Run metaregression using post intervention months as dependent variable
+    over_time_stats <- data_outcome %>% group_by(post_intervention_months) %>% summarise(n = n())
+    over_time_sens <- "N/A"
+    if (nrow(over_time_stats) > 1) {
+        result_metareg <- robu(
+            formula = yi ~ post_intervention_months,
+            data = data_outcome,
+            var.eff.size = vi,
+            studynum = study,
+            rho = 0.8,
+            small = TRUE,
+        )
+        print(result_metareg)
+        over_time_sens <- paste(
+            paste0("t=", round(result_metareg$reg_table$t[2], 3)),
+            paste0("p=", round(result_metareg$reg_table$prob[2], 3)),
+            paste0("df=", round(result_metareg$reg_table$dfs[2], 3)),
+            sep = ", "
+        )
+    }
+
+    result$reg_table$`s-value¹` <- ifelse(
         is.numeric(bias_result$stats$sval_ci),
         round(bias_result$stats$sval_ci, 3),
         "--"
     )
     result$reg_table$`Egger's prob` <- eggers$reg_table$prob[2]
-    result$reg_table$`Exp/quasi sensitivity^` <- study_design_sens
+    result$reg_table$`Exp/quasi sensitivity²` <- study_design_sens
+    result$reg_table$`Control type sensitivity³` <- control_sens
+    result$reg_table$`d,p-val (inact. con.)⁴` <- routine_care_effects
+    result$reg_table$`Int. x time⁵` <- over_time_sens
     result$reg_table$outcome <- outcome_name
 
     reg_table <- rbind(reg_table, result$reg_table)
@@ -146,7 +272,7 @@ for (data_outcome in data_outcomes) {
     print(result)
 
     png(
-        paste("figures/", outcome_name, "_funnel.png", sep = ""),
+        paste("figures/", outcome_name, " funnel.png", sep = ""),
         res = 600,
         width = 4.5,
         height = 4,
@@ -189,7 +315,8 @@ reg_table <- reg_table %>% mutate(
     ) %>%
     mutate_if(is.numeric, ~round(., 3)) %>%
     select("outcome", everything()) %>%
-    relocate(any_of(c("CI.L", "CI.U")), .after = `b.r`)
+    relocate(any_of(c("CI.L", "CI.U")), .after = `b.r`) %>%
+    relocate(any_of(c("Egger's sig")), .after = `Egger's prob`)
 
 write.csv(
     reg_table,
@@ -207,17 +334,23 @@ reg_table <- reg_table %>% rename(
 png(
     "figures/Results.png",
     res = 600,
-    width = 15,
+    width = 21,
     height = 5,
     units = "in",
 )
 footnote <- textGrob(
     paste(
-        "*s-value is defined as the ratio by which significant studies would have be to more",
+        "¹s-value is defined as the ratio by which significant studies would have be to more",
         "likely to be published than non-signficant studies to eliminate significance.",
-        "\n^The sensitivity analysis for study design compared experimental and quasi-experimental",
+        "\n²The sensitivity analysis for study design compared experimental and quasi-experimental",
         "studies. A significant impact due to study design is indicated by a p<0.05.\nSome",
-        "outcomes included only experimental study designs, indicated by N/A."
+        "outcomes included only experimental study designs, indicated by N/A.",
+        "\n³The sensitivity analysis for control type compared active and inactive control",
+        "studies.",
+        "\n⁴For analyses that were sensitive to the inclusion of active controls, analyses were",
+        "rerun with only inactivate control studies.",
+        "\n⁵To assess how the effect of intervention in sustained over time, a metaregression was",
+        "performed with post-intervention follow-up time as the dependent variable."
     ),
     x = 0,
     hjust = 0,
