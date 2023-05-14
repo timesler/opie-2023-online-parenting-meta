@@ -14,15 +14,10 @@
 
 * Positive Cohen's d are bad for anxiety, depression and stress, and good for the other outcomes.
 
-## Comparing 
+## Comparing follow-up periods (0-3 mos, 4-6 mos, 6-24 mos) 
 
+### 0-3 months vs. 4-6 months: ns difference
 ```
-############################
-Comparing follow-up periods (0-3 mos, 4-6 mos, 6-24 mos)
-############################
-
-0-3 months vs. 4-6 months: ns difference
-
 Welch Two Sample t-test
 t = -1.3005, df = 24.226, p-value = 0.2057
 
@@ -31,10 +26,10 @@ t = -1.3005, df = 24.226, p-value = 0.2057
 sample estimates:
     mean of x   mean of y
     0.8718541   1.3323785
+```
 
-
-0-3 months vs. 6-24 months: sig difference
-
+### 0-3 months vs. 6-24 months: sig difference
+```
 Welch Two Sample t-test
 t = 3.3604, df = 63.951, p-value = 0.001316
 
@@ -43,10 +38,10 @@ t = 3.3604, df = 63.951, p-value = 0.001316
 sample estimates:
     mean of x   mean of y
     0.8718541   0.1431778
+```
 
-
-4-6 months vs. 6-24 months: sig difference
-
+### 4-6 months vs. 6-24 months: sig difference
+```
 Welch Two Sample t-test
 t = 3.2107, df = 27.829, p-value = 0.003329
 
