@@ -7,7 +7,7 @@
 * In terms of publication bias, only depression showed bias via an Egger's regression test. In addition, several other outcomes (anxiety, parent self-efficacy, and parent-child interaction) appear to show bias in their funnel plots under visual inspection, although this is of course subjective and was not corroborated by statistical tests.
 * For the exp vs quasi sensitivity analysis, no outcomes showed significant sensitivity. I.e., there was not observed different between the measured impact of interventions from experiment and quasi-experimental studies.
 * For the active vs inactive control group sensitivity analysis, significant difference were observed between the studies with each type of control for parent self-efficacy and social support. To estimate the impact of this on our overall results, the meta-analyses for these 2 outcomes were re-run using only studies with inactive controls. This yielded minor increases in the intervention vs control effect, however there was no change to significance as both outcomes were already significant without removal of active controls.
-* A meta-regression to examine how effects are sustained over time post-intervention included post-intervention assessment interval yielded no significant change to intervention effects over time. 
+* ~~A meta-regression to examine how effects are sustained over time post-intervention yielded no significant change to intervention effects over time.~~ A set time-binned group comparisons performed using t-tests (see below) did find some interesting significance. 
 
 
 ## Notes
