@@ -296,18 +296,18 @@ for (data_outcome in data_outcomes) {
         )
     }
 
-    result$reg_table$`s-value¹` <- ifelse(
+    result$reg_table$`Egger's prob¹` <- eggers$reg_table$prob[2]
+    result$reg_table$`s-value²` <- ifelse(
         is.numeric(bias_result$stats$sval_ci),
         round(bias_result$stats$sval_ci, 3),
         "--"
     )
-    result$reg_table$`Egger's prob` <- eggers$reg_table$prob[2]
-    result$reg_table$`Exp/quasi sensitivity²` <- study_design_sens
-    result$reg_table$`Control type sensitivity³` <- control_sens
-    result$reg_table$`d,p-val (inact. con.)⁴` <- routine_care_effects
-    result$reg_table$`Int. x time⁵` <- over_time_sens
-    result$reg_table$`Sex⁶` <- sex_sens
-    result$reg_table$`Guidance⁷` <- guidance_sens
+    result$reg_table$`Exp/quasi sensitivity³` <- study_design_sens
+    result$reg_table$`Control type sensitivity⁴` <- control_sens
+    result$reg_table$`d,p-val (inact. con.)⁵` <- routine_care_effects
+    result$reg_table$`Int. x time⁶` <- over_time_sens
+    result$reg_table$`Sex⁷` <- sex_sens
+    result$reg_table$`Guidance⁸` <- guidance_sens
     result$reg_table$outcome <- outcome_name
 
     reg_table <- rbind(reg_table, result$reg_table)
@@ -350,9 +350,9 @@ for (data_outcome in data_outcomes) {
 
 reg_table <- reg_table %>% mutate(
         `Egger's sig` = case_when(
-            `Egger's prob` < 0.01 ~ "***",
-            `Egger's prob` < 0.05 ~ "**",
-            `Egger's prob` < 0.1 ~ "*",
+            `Egger's prob¹` < 0.01 ~ "***",
+            `Egger's prob¹` < 0.05 ~ "**",
+            `Egger's prob¹` < 0.1 ~ "*",
             TRUE ~ "",
         ),
     ) %>%
@@ -385,15 +385,15 @@ results_table <- reg_table %>% select(
 
 moderator_table <- reg_table %>% select(
     outcome,
-    `Egger's prob`,
+    `Egger's prob¹`,
     `Egger's sig`,
-    `s-value¹`,
-    `Exp/quasi sensitivity²`,
-    `Control type sensitivity³`,
-    `d,p-val (inact. con.)⁴`,
-    `Int. x time⁵`,
-    `Sex⁶`,
-    `Guidance⁷`,
+    `s-value²`,
+    `Exp/quasi sensitivity³`,
+    `Control type sensitivity⁴`,
+    `d,p-val (inact. con.)⁵`,
+    `Int. x time⁶`,
+    `Sex⁷`,
+    `Guidance⁸`,
 )
 
 png(
@@ -418,22 +418,24 @@ png(
 footnote <- textGrob(
     paste(
         "Sensitivity analyses:",
-        "\n    ¹s-value is defined as the ratio by which significant studies would have be to more",
+        "\n    ¹Egger's regression test measures for a relationship between",
+        "effect-size and standard error, with a significant trend suggesting publication bias.",
+        "\n    ²s-value is defined as the ratio by which significant studies would have be to more",
         "likely to be published than non-signficant studies to eliminate significance.",
-        "\n    ²The sensitivity analysis for study design compared experimental and",
+        "\n    ³The sensitivity analysis for study design compared experimental and",
         "quasi-experimental studies. A significant impact due to study design is indicated by a",
         "p<0.05.",
         "\n    Some outcomes included only experimental study designs, indicated by N/A.",
-        "\n    ³The sensitivity analysis for control type compared active and inactive control",
+        "\n    ⁴The sensitivity analysis for control type compared active and inactive control",
         "studies.",
-        "\n    ⁴For analyses that were sensitive to the inclusion of active controls, analyses",
+        "\n    ⁵For analyses that were sensitive to the inclusion of active controls, analyses",
         "were rerun with only inactivate control studies.",
         "\nModerator analyses:",
-        "\n    ⁵To assess how the effect of intervention is sustained over time, a metaregression",
+        "\n    ⁶To assess how the effect of intervention is sustained over time, a metaregression",
         "was performed with post-intervention follow-up time as the independent variable.",
-        "\n    ⁶To assess the relationship between sex and intervention efficacy, a metaregression",
+        "\n    ⁷To assess the relationship between sex and intervention efficacy, a metaregression",
         "was performed with female proportion as the independent variable.",
-        "\n    ⁷To assess the impact of guidance during intervention, a metaregression was",
+        "\n    ⁸To assess the impact of guidance during intervention, a metaregression was",
         "performed with guidance type (fully self-guided or partially self-guided) as the",
         "independent variable."
     ),
