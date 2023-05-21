@@ -75,6 +75,8 @@ Signif. codes: < .01 *** < .05 ** < .10 *
 ---
 ```
 
+Relevant p-value is 0.864 (not significant)
+
 ## Guidance (Fully vs Partially Self-Guided)
 
 ```
@@ -98,3 +100,5 @@ Tau.sq = 0.7688304
 Signif. codes: < .01 *** < .05 ** < .10 *
 ---
 ```
+
+Relevant p-value is 0.23066 (not significant)
