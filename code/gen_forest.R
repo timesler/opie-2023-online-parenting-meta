@@ -1,3 +1,4 @@
+library(dplyr)
 library(plyr)
 library(grid)
 library(forestploter)
@@ -7,6 +8,8 @@ reg_table <- read.csv(paste("data/reg_table.csv", sep = "")) %>%
     group_split(outcome)
 for (reg_outcome in reg_table) {
     outcome_name <- reg_outcome$outcome[1]
+    cat(outcome_name, "\n")
+
     data <- read.csv(paste("data/", outcome_name, ".csv", sep = "")) %>%
         mutate(
             ci.lb = yi - sqrt(vi) * 1.96,
@@ -16,6 +19,7 @@ for (reg_outcome in reg_table) {
             is_summary = FALSE,
         ) %>%
         arrange(-yi)
+
     reg_outcome <- data.frame(
         study = "Total                           ",
         yi = reg_outcome$b.r,
@@ -34,7 +38,7 @@ for (reg_outcome in reg_table) {
         )
 
     # Keep needed columns
-    data <- data[, c(1, 4, 5, 8, 6, 9, 10, 11)]
+    data <- data[, c(1, 4, 5, 8, 6, 13, 14, 15)]
     data$Subsample <- coalesce(data$Subsample, "")
     data$`FU (mo.)` <- coalesce(data$`FU (mo.)`, "")
     data$N <- coalesce(data$N, "")

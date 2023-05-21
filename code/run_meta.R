@@ -132,6 +132,8 @@ data_outcomes <- data %>%
         "N",
         "design",
         "control",
+        "prop_female",
+        "guidance",
     ) %>%
     group_split(outcome)
 
@@ -246,8 +248,47 @@ for (data_outcome in data_outcomes) {
             rho = 0.8,
             small = TRUE,
         )
-        print(result_metareg)
         over_time_sens <- paste(
+            paste0("t=", round(result_metareg$reg_table$t[2], 3)),
+            paste0("p=", round(result_metareg$reg_table$prob[2], 3)),
+            paste0("df=", round(result_metareg$reg_table$dfs[2], 3)),
+            sep = ", "
+        )
+    }
+
+    # Run metaregression using female proportion as dependent variable
+    sex_stats <- data_outcome %>% group_by(prop_female) %>% summarise(n = n())
+    sex_sens <- "N/A"
+    if (nrow(sex_stats) > 1) {
+        result_metareg <- robu(
+            formula = yi ~ prop_female,
+            data = data_outcome,
+            var.eff.size = vi,
+            studynum = study,
+            rho = 0.8,
+            small = TRUE,
+        )
+        sex_sens <- paste(
+            paste0("t=", round(result_metareg$reg_table$t[2], 3)),
+            paste0("p=", round(result_metareg$reg_table$prob[2], 3)),
+            paste0("df=", round(result_metareg$reg_table$dfs[2], 3)),
+            sep = ", "
+        )
+    }
+
+    # Run sensitivity analysis over guidance
+    guidance_stats <- data_outcome %>% group_by(guidance) %>% summarise(n = n())
+    guidance_sens <- "N/A"
+    if (min(guidance_stats$n) > 2 && nrow(guidance_stats) == 2) {
+        result_metareg <- robu(
+            formula = yi ~ design,
+            data = data_outcome,
+            var.eff.size = vi,
+            studynum = study,
+            rho = 0.8,
+            small = TRUE,
+        )
+        guidance_sens <- paste(
             paste0("t=", round(result_metareg$reg_table$t[2], 3)),
             paste0("p=", round(result_metareg$reg_table$prob[2], 3)),
             paste0("df=", round(result_metareg$reg_table$dfs[2], 3)),
@@ -265,6 +306,8 @@ for (data_outcome in data_outcomes) {
     result$reg_table$`Control type sensitivity³` <- control_sens
     result$reg_table$`d,p-val (inact. con.)⁴` <- routine_care_effects
     result$reg_table$`Int. x time⁵` <- over_time_sens
+    result$reg_table$`Sex⁶` <- sex_sens
+    result$reg_table$`Guidance⁷` <- guidance_sens
     result$reg_table$outcome <- outcome_name
 
     reg_table <- rbind(reg_table, result$reg_table)
@@ -313,10 +356,7 @@ reg_table <- reg_table %>% mutate(
             TRUE ~ "",
         ),
     ) %>%
-    mutate_if(is.numeric, ~round(., 3)) %>%
-    select("outcome", everything()) %>%
-    relocate(any_of(c("CI.L", "CI.U")), .after = `b.r`) %>%
-    relocate(any_of(c("Egger's sig")), .after = `Egger's prob`)
+    mutate_if(is.numeric, ~round(., 3))
 
 write.csv(
     reg_table,
@@ -331,33 +371,78 @@ reg_table <- reg_table %>% rename(
         `95% CI (U)` = `CI.U`,
     )
 
+results_table <- reg_table %>% select(
+    outcome,
+    `Cohen's d`,
+    `95% CI (L)`,
+    `95% CI (U)`,
+    SE,
+    t,
+    dfs,
+    `p-val`,
+    sig,
+)
+
+moderator_table <- reg_table %>% select(
+    outcome,
+    `Egger's prob`,
+    `Egger's sig`,
+    `s-value¹`,
+    `Exp/quasi sensitivity²`,
+    `Control type sensitivity³`,
+    `d,p-val (inact. con.)⁴`,
+    `Int. x time⁵`,
+    `Sex⁶`,
+    `Guidance⁷`,
+)
+
 png(
     "figures/Results.png",
     res = 600,
-    width = 21,
+    width = 8,
+    height = 3,
+    units = "in",
+)
+table <- tableGrob(results_table, rows = NULL)
+grid.draw(table)
+dev.off()
+
+
+png(
+    "figures/ModeratorAndSensitivity.png",
+    res = 600,
+    width = 18,
     height = 5,
     units = "in",
 )
 footnote <- textGrob(
     paste(
-        "¹s-value is defined as the ratio by which significant studies would have be to more",
+        "Sensitivity analyses:",
+        "\n    ¹s-value is defined as the ratio by which significant studies would have be to more",
         "likely to be published than non-signficant studies to eliminate significance.",
-        "\n²The sensitivity analysis for study design compared experimental and quasi-experimental",
-        "studies. A significant impact due to study design is indicated by a p<0.05.\nSome",
-        "outcomes included only experimental study designs, indicated by N/A.",
-        "\n³The sensitivity analysis for control type compared active and inactive control",
+        "\n    ²The sensitivity analysis for study design compared experimental and",
+        "quasi-experimental studies. A significant impact due to study design is indicated by a",
+        "p<0.05.",
+        "\n    Some outcomes included only experimental study designs, indicated by N/A.",
+        "\n    ³The sensitivity analysis for control type compared active and inactive control",
         "studies.",
-        "\n⁴For analyses that were sensitive to the inclusion of active controls, analyses were",
-        "rerun with only inactivate control studies.",
-        "\n⁵To assess how the effect of intervention in sustained over time, a metaregression was",
-        "performed with post-intervention follow-up time as the dependent variable."
+        "\n    ⁴For analyses that were sensitive to the inclusion of active controls, analyses",
+        "were rerun with only inactivate control studies.",
+        "\nModerator analyses:",
+        "\n    ⁵To assess how the effect of intervention is sustained over time, a metaregression",
+        "was performed with post-intervention follow-up time as the independent variable.",
+        "\n    ⁶To assess the relationship between sex and intervention efficacy, a metaregression",
+        "was performed with female proportion as the independent variable.",
+        "\n    ⁷To assess the impact of guidance during intervention, a metaregression was",
+        "performed with guidance type (fully self-guided or partially self-guided) as the",
+        "independent variable."
     ),
     x = 0,
     hjust = 0,
     gp = gpar(fontface = "italic", fontsize = 10),
 )
-table <- tableGrob(reg_table, rows = NULL)
-table <- gtable_add_rows(table, heights = c(0.3, 1.2) * grobHeight(footnote))
+table <- tableGrob(moderator_table, rows = NULL)
+table <- gtable_add_rows(table, heights = c(0.1, 1.2) * grobHeight(footnote))
 table <- gtable_add_grob(
     table,
     footnote,
