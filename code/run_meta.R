@@ -71,7 +71,7 @@ data <- data %>% mutate(
 
 cat(
     "\n\n\n\n############################\n",
-    "Comparing follow-up periods (0-3 mos, 4-6 mos, 7-24 mos)",
+    "Aggregated Moderator Analysis: Comparing follow-up periods (0-3 mos, 4-6 mos, 7-24 mos)",
     "\n############################\n",
     sep = ""
 )
@@ -95,16 +95,6 @@ tt <- t.test(
 cat("\n4-6 months vs. 7-24 months\n")
 print(tt)
 
-result_time_all <- robu(
-    formula = `Cohen's d (sign adj.)` ~ post_intervention_months,
-    data = data,
-    var.eff.size = vi,
-    studynum = study,
-    rho = 0.8,
-    small = TRUE,
-)
-print(result_time_all)
-
 g <- ggplot(
         data %>% rename(`Post-intervention assessment interval (mos.)` = post_intervention_months),
         aes(x = `Post-intervention assessment interval (mos.)`, y = `Cohen's d (sign adj.)`),
@@ -118,6 +108,38 @@ ggsave(
     width = 10,
     height = 6,
 )
+
+cat(
+    "\n\n\n\n############################\n",
+    "Aggregated Moderator Analysis: Sex (proportion female)",
+    "\n############################\n",
+    sep = ""
+)
+mod_results <- robu(
+    formula = `Cohen's d (sign adj.)` ~ prop_female,
+    data = data,
+    var.eff.size = vi,
+    studynum = study,
+    rho = 0.8,
+    small = TRUE,
+)
+print(mod_results)
+
+cat(
+    "\n\n\n\n############################\n",
+    "Aggregated Moderator Analysis: Guidance (self- vs partially self-guided)",
+    "\n############################\n",
+    sep = ""
+)
+mod_results <- robu(
+    formula = `Cohen's d (sign adj.)` ~ guidance,
+    data = data,
+    var.eff.size = vi,
+    studynum = study,
+    rho = 0.8,
+    small = TRUE,
+)
+print(mod_results)
 
 data_outcomes <- data %>%
     # filter(post_intervention_months <= 6) %>%

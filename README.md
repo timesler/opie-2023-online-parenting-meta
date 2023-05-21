@@ -14,7 +14,9 @@
 
 * Positive Cohen's d are bad for anxiety, depression and stress, and good for the other outcomes.
 
-## Comparing follow-up periods (0-3 mos, 4-6 mos, 6-24 mos) 
+# Aggregated (i.e., not outcome-specific) Moderator Analyses
+
+## Follow-up periods (0-3 mos, 4-6 mos, 6-24 mos) 
 
 ### 0-3 months vs. 4-6 months: ns difference
 ```
@@ -50,4 +52,49 @@ t = 3.2107, df = 27.829, p-value = 0.003329
 sample estimates:
     mean of x   mean of y
     1.3323785   0.1431778
+```
+
+## Sex (Proportion Female)
+
+```
+RVE: Correlated Effects Model with Small-Sample Corrections 
+
+Model: Cohen's d (sign adj.) ~ prop_female
+
+Number of studies = 22
+Number of outcomes = 133 (min = 1 , mean = 6.05 , median = 4.5 , max = 15 )
+Rho = 0.8
+I.sq = 97.03289
+Tau.sq = 0.7114448
+
+               Estimate StdErr t-value  dfs P(|t|>) 95% CI.L 95% CI.U Sig
+1 X.Intercept.    0.853  0.528   1.615 2.70   0.214   -0.936     2.64
+2  prop_female   -0.119  0.641  -0.185 3.39   0.864   -2.031     1.79
+---
+Signif. codes: < .01 *** < .05 ** < .10 *
+---
+```
+
+## Guidance (Fully vs Partially Self-Guided)
+
+```
+RVE: Correlated Effects Model with Small-Sample Corrections 
+
+Model: Cohen's d (sign adj.) ~ guidance
+
+Number of studies = 22
+Number of outcomes = 133 (min = 1 , mean = 6.05 , median = 4.5 , max = 15 )
+Rho = 0.8
+I.sq = 97.11806
+Tau.sq = 0.7688304
+
+                      Estimate StdErr t-value   dfs P(|t|>) 95% CI.L 95% CI.U
+1        X.Intercept.    1.029  0.254    4.06  8.95 0.00289    0.455    1.604
+2 guidanceSelf.guided   -0.503  0.406   -1.24 19.14 0.23066   -1.353    0.347
+  Sig
+1 ***
+2
+---
+Signif. codes: < .01 *** < .05 ** < .10 *
+---
 ```
