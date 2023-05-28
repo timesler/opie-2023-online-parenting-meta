@@ -28,8 +28,6 @@ data <- escalc(
     n2i = ncon,
 )
 
-data <- data %>% filter(outcome != "Parental confidence")
-
 # Summarize included studies
 study_outcomes <- data %>%
     distinct(study, outcome) %>%
@@ -55,8 +53,8 @@ dev.off()
 
 # When Cohen's d cannot be calculated, fall back to reported values
 data <- data %>% mutate(
-    yi = coalesce(yi, precalc_d),
-    vi = coalesce(vi, precalc_v),
+    yi = coalesce(calculated_d, yi, precalc_d),
+    vi = coalesce(calculated_v_p0_5, vi, precalc_v),
     `Cohen's d (sign adj.)` = case_when(
         outcome %in% c("Anxiety", "Depression", "Stress") ~ -yi,
         TRUE ~ yi,
@@ -68,12 +66,20 @@ data <- data %>% mutate(
     )
 )
 
-
 cat(
     "\n\n\n\n############################\n",
     "Aggregated Moderator Analysis: Comparing follow-up periods (0-3 mos, 4-6 mos, 7-24 mos)",
     "\n############################\n",
     sep = ""
+)
+
+print(
+    data %>%
+        group_by(post_bins) %>%
+        summarise(
+            bin_mean = mean(`Cohen's d (sign adj.)`),
+            bin_se = sd(`Cohen's d (sign adj.)`) / sqrt(n()),
+        )
 )
 
 tt <- t.test(
@@ -178,7 +184,7 @@ for (data_outcome in data_outcomes) {
         formula = yi ~ 1,
         data = data_outcome,
         var.eff.size = vi,
-        studynum = study,
+        studynum = sample_id,
         rho = 0.8,
         small = TRUE,
     )
@@ -188,7 +194,7 @@ for (data_outcome in data_outcomes) {
         formula = yi ~ sei,
         data = data_outcome,
         var.eff.size = vi,
-        studynum = study,
+        studynum = sample_id,
         rho = 0.8,
         small = TRUE,
     )
@@ -209,7 +215,7 @@ for (data_outcome in data_outcomes) {
             formula = yi ~ design,
             data = data_outcome,
             var.eff.size = vi,
-            studynum = study,
+            studynum = sample_id,
             rho = 0.8,
             small = TRUE,
         )
@@ -230,7 +236,7 @@ for (data_outcome in data_outcomes) {
             formula = yi ~ control,
             data = data_outcome,
             var.eff.size = vi,
-            studynum = study,
+            studynum = sample_id,
             rho = 0.8,
             small = TRUE,
         )
@@ -246,7 +252,7 @@ for (data_outcome in data_outcomes) {
                 formula = yi ~ 1,
                 data = data_outcome %>% filter(control == "Routine care"),
                 var.eff.size = vi,
-                studynum = study,
+                studynum = sample_id,
                 rho = 0.8,
                 small = TRUE,
             )
@@ -266,7 +272,7 @@ for (data_outcome in data_outcomes) {
             formula = yi ~ post_intervention_months,
             data = data_outcome,
             var.eff.size = vi,
-            studynum = study,
+            studynum = sample_id,
             rho = 0.8,
             small = TRUE,
         )
@@ -286,7 +292,7 @@ for (data_outcome in data_outcomes) {
             formula = yi ~ prop_female,
             data = data_outcome,
             var.eff.size = vi,
-            studynum = study,
+            studynum = sample_id,
             rho = 0.8,
             small = TRUE,
         )
@@ -306,7 +312,7 @@ for (data_outcome in data_outcomes) {
             formula = yi ~ design,
             data = data_outcome,
             var.eff.size = vi,
-            studynum = study,
+            studynum = sample_id,
             rho = 0.8,
             small = TRUE,
         )
