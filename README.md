@@ -2,12 +2,12 @@
 
 ## Headlines
 
-* Interventions have a significant impact on depression, parent self-efficacy, and social support. There was also a marginal impact observed on parent-child interaction, but this did not reach the 0.05 significance level.
-    * For discussion possibly: Even though there was a clear lack of studies, that assessed dyadic outcomes, such as parent-child interaction, we still observed results that approached significance and would expect additional study and data in this area to highlight some true benefits.
-* In terms of publication bias, only depression showed bias via an Egger's regression test. In addition, several other outcomes (anxiety, parent self-efficacy, and parent-child interaction) appear to show bias in their funnel plots under visual inspection, although this is of course subjective and was not corroborated by statistical tests.
-* For the exp vs quasi sensitivity analysis, no outcomes showed significant sensitivity. I.e., there was not observed different between the measured impact of interventions from experiment and quasi-experimental studies.
-* For the active vs inactive control group sensitivity analysis, significant difference were observed between the studies with each type of control for parent self-efficacy and social support. To estimate the impact of this on our overall results, the meta-analyses for these 2 outcomes were re-run using only studies with inactive controls. This yielded minor increases in the intervention vs control effect, however there was no change to significance as both outcomes were already significant without removal of active controls.
-* ~~A meta-regression to examine how effects are sustained over time post-intervention yielded no significant change to intervention effects over time.~~ A set time-binned group comparisons performed using t-tests (see below) did find some interesting significance. 
+* Interventions have a significant impact on anxiety, depression, and parent self-efficacy. There was also a marginal impact observed on parent-child interaction, but this did not reach the 0.05 significance level. Additionally, a sensitivity analysis demonstrated that results for self-efficacy and social support are significantly impacted by the presence of both inactive and active controls in the included data. Additional analysis of social support for only studies with inactive controls yielded a significant impact due to online UPPs.
+    * For discussion possibly: Even though there was a clear lack of studies that assessed dyadic outcomes, such as parent-child interaction, we still observed results that approached significance and would expect additional study and data in this area to highlight some true benefits.
+* Based on Egger's regression test, no outcomes demonstrated evidence of publication bias. 
+* For the exp vs quasi sensitivity analysis, a significant difference was observed for parent satisfaction between studies with experimental and quasi-experimental designs. 
+* For the active vs inactive control group sensitivity analysis, significant differencea were observed between the studies with each type of control for parent self-efficacy and social support. To estimate the impact of this on our overall results, the meta-analyses for these 2 outcomes were re-run using only studies with inactive controls. This yielded minor increases in the intervention vs control effect, resulting in social support becoming significant.
+* A set time-binned group comparisons performed using t-tests (see below) did find some interesting significance. 
 
 
 ## Notes
@@ -21,37 +21,40 @@
 ### 0-3 months vs. 4-6 months: ns difference
 ```
 Welch Two Sample t-test
-t = -1.3005, df = 24.226, p-value = 0.2057
+
+t = 1.287, df = 51.633, p-value = 0.2038
 
 95 percent confidence interval:
-    -1.1910181  0.2699693
+ -0.07869797  0.36003405
 sample estimates:
-    mean of x   mean of y
-    0.8718541   1.3323785
+mean of x mean of y
+0.4697918 0.3291238
 ```
 
 ### 0-3 months vs. 6-24 months: sig difference
 ```
 Welch Two Sample t-test
-t = 3.3604, df = 63.951, p-value = 0.001316
+
+t = 5.1839, df = 78.65, p-value = 0.000001642
 
 95 percent confidence interval:
-    0.2954842 1.1618684
+ 0.3411107 0.7663765
 sample estimates:
-    mean of x   mean of y
-    0.8718541   0.1431778
+  mean of x   mean of y
+ 0.46979185 -0.08395176
 ```
 
 ### 4-6 months vs. 6-24 months: sig difference
 ```
 Welch Two Sample t-test
-t = 3.2107, df = 27.829, p-value = 0.003329
+
+t = 3.6689, df = 42.959, p-value = 0.0006677
 
 95 percent confidence interval:
-    0.4302972 1.9481043
+ 0.1860115 0.6401397
 sample estimates:
-    mean of x   mean of y
-    1.3323785   0.1431778
+  mean of x   mean of y
+ 0.32912381 -0.08395176
 ```
 
 ## Sex (Proportion Female)
@@ -64,18 +67,18 @@ Model: Cohen's d (sign adj.) ~ prop_female
 Number of studies = 22
 Number of outcomes = 133 (min = 1 , mean = 6.05 , median = 4.5 , max = 15 )
 Rho = 0.8
-I.sq = 97.03289
-Tau.sq = 0.7114448
+I.sq = 94.58692
+Tau.sq = 0.3587194
 
                Estimate StdErr t-value  dfs P(|t|>) 95% CI.L 95% CI.U Sig
-1 X.Intercept.    0.853  0.528   1.615 2.70   0.214   -0.936     2.64
-2  prop_female   -0.119  0.641  -0.185 3.39   0.864   -2.031     1.79
+1 X.Intercept.    0.974  0.473    2.06 2.88   0.136   -0.568    2.515
+2  prop_female   -0.663  0.521   -1.27 3.60   0.279   -2.174    0.847
 ---
 Signif. codes: < .01 *** < .05 ** < .10 *
 ---
 ```
 
-Relevant p-value is 0.864 (not significant)
+Relevant p-value is 0.279 (not significant)
 
 ## Guidance (Fully vs Partially Self-Guided)
 
@@ -87,18 +90,18 @@ Model: Cohen's d (sign adj.) ~ guidance
 Number of studies = 22
 Number of outcomes = 133 (min = 1 , mean = 6.05 , median = 4.5 , max = 15 )
 Rho = 0.8
-I.sq = 97.11806
-Tau.sq = 0.7688304
+I.sq = 94.88055
+Tau.sq = 0.3978489
 
                       Estimate StdErr t-value   dfs P(|t|>) 95% CI.L 95% CI.U
-1        X.Intercept.    1.029  0.254    4.06  8.95 0.00289    0.455    1.604
-2 guidanceSelf.guided   -0.503  0.406   -1.24 19.14 0.23066   -1.353    0.347
+1        X.Intercept.    0.668  0.228    2.93  8.89   0.017    0.151   1.1845
+2 guidanceSelf.guided   -0.477  0.256   -1.86 19.00   0.078   -1.012   0.0588
   Sig
-1 ***
-2
+1  **
+2   *
 ---
 Signif. codes: < .01 *** < .05 ** < .10 *
 ---
 ```
 
-Relevant p-value is 0.23066 (not significant)
+Relevant p-value is 0.078 (not significant)
